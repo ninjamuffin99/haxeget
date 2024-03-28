@@ -24,6 +24,11 @@ pub async fn run_install(version: String) -> Result<()> {
         _ => executor::block_on(packages::haxe_stable::download(&cache, &version)),
     };
 
+    match download {
+        Ok(_) => println!("Download Complete!"),
+        Err(e) => return Err(eyre!(e)),
+    }
+
     if let Ok(file_name) = download {
         let location = if version.eq("ceramic") {
             let ceramic_dir = Cache::get_path().unwrap() + "/bin/ceramic";
